@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BalanceRequest {
-    private long balance;
+    private double balance;
 }
