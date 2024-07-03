@@ -3,19 +3,23 @@ package com.phincon.backend.bootcamp.marketplace.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Min;
 
 import java.util.List;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequest {
-    @NotBlank
+    @NotBlank(message = "Cannot be blank")
     private String name;
 
     @Min(1000)
+    @NotBlank
+    @NotEmpty
     private double price;
 
     @NotBlank
