@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS product (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price FLOAT(8) NOT NULL,
+    category VARCHAR(255)[],
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    description VARCHAR(255),
+    image_url VARCHAR(255) NOT NULL,
+    stock_quantity INTEGER NOT NULL,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
