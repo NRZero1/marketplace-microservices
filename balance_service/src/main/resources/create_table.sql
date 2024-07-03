@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS balance (
+    id SERIAL PRIMARY KEY,
+    balance FLOAT(8) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS transaction (
+    id SERIAL PRIMARY KEY,
+    amount FLOAT(8) NOT NULL,
+    order_id BIGINT NOT NULL,
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    mode VARCHAR(255) NOT NULL,
+    status VARCHAR(255) NOT NULL,
+    reference_number VARCHAR(255) NOT NULL
+);
