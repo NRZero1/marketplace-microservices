@@ -42,8 +42,8 @@ public class BalanceService {
         return balanceRepository.findById(id)
                 .map(Optional::of)
                 .defaultIfEmpty(Optional.empty())
-                .flatMap(optionalProduct -> {
-                    if (optionalProduct.isPresent()) {
+                .flatMap(optionalBalance -> {
+                    if (optionalBalance.isPresent()) {
                         balance.setId(id);
                         balanceRepository.save(balance);
                     }
