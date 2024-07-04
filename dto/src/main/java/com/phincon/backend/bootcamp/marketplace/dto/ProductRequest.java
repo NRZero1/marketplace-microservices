@@ -6,29 +6,30 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductRequest {
-    @NotBlank(message = "Cannot be blank")
+    @NotBlank(message = "Name cannot be null or blank")
     private String name;
 
     @Min(1000)
-    @NotBlank
-    @NotEmpty
+    @NotNull(message = "Price cannot be null")
     private double price;
 
-    @NotBlank
+    @NotEmpty(message = "Category cannot be empty")
     private List<String> category;
 
     private String description;
 
+    @NotBlank(message = "Image url cannot be null or blank")
     private String imageUrl;
 
-    @Min(1)
+    @Min(value = 1, message = "Stock minimum 1")
     private int stockQuantity;
 }
