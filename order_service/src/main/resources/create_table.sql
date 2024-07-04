@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS orders (
     order_status VARCHAR(255) NOT NULL,
     payment_method VARCHAR(255) NOT NULL,
     shipping_address VARCHAR(255) NOT NULL,
-    total_amount BIGINT NOT NULL
+    total_amount FLOAT(8) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS order-item (
