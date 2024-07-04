@@ -54,15 +54,14 @@ public class ProductService {
     }
 
     public Mono<Product> update(long id, ProductRequest request) {
+        Product product = new Product();
         return productRepository.findById(id)
                 .map(Optional::of)
                 .defaultIfEmpty(Optional.empty())
                 .flatMap(optionalProduct -> {
                     if (optionalProduct.isPresent()) {
-                        return productRepository.save(
-                                Product.builder()
-                                        .id(id)
-                                        .build());
+                        product.setId(id);
+                        return productRepository.save(product);
                     }
 
                     return Mono.empty();
