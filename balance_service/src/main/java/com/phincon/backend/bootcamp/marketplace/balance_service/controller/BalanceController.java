@@ -41,7 +41,7 @@ public class BalanceController {
 
     @PutMapping("/{id}")
     public Mono<Balance> update(@PathVariable long id, BalanceRequest balanceRequest) {
-        return balanceService.update(0, balanceRequest);
+        return balanceService.update(id, balanceRequest);
     }
 
     @DeleteMapping("/{id}")
