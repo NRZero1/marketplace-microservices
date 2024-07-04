@@ -8,6 +8,7 @@ import com.phincon.backend.bootcamp.marketplace.dto.ProductRequest;
 import com.phincon.backend.bootcamp.marketplace.product_service.model.Product;
 import com.phincon.backend.bootcamp.marketplace.product_service.service.ProductService;
 
+import jakarta.validation.Valid;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -26,7 +27,7 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Product> create(@RequestBody ProductRequest product) {
+    public Mono<Product> create(@RequestBody @Valid ProductRequest product) {
         return productService.save(product);
     }
 
