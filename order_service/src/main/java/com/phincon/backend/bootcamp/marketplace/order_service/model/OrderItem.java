@@ -21,7 +21,7 @@ public class OrderItem {
     private double price;
 
     @Column("product_id")
-    private long productid;
+    private long productId;
 
     private int quantity;
 
