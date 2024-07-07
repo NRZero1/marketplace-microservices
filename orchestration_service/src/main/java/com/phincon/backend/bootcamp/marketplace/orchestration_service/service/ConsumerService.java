@@ -2,10 +2,7 @@ package com.phincon.backend.bootcamp.marketplace.orchestration_service.service;
 
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phincon.backend.bootcamp.marketplace.orchestration_service.dto.Test;
+import com.phincon.backend.bootcamp.marketplace.dto.OrderResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,8 +21,9 @@ public class ConsumerService {
     // }
     // }
 
-    @KafkaListener(topics = "test", groupId = "test")
-    public void consumeMessage(Test test) {
-        log.info("The content of the message is: {}", test.toString());
+    @KafkaListener(topics = "order-service", groupId = "orders")
+    public void consumeMessage(OrderResponse orderResponse) {
+        log.info("The content of the received message is: {}", orderResponse.toString());
+
     }
 }
