@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.phincon.backend.bootcamp.marketplace.orchestration_service.dto.Test;
 import com.phincon.backend.bootcamp.marketplace.orchestration_service.service.ProducerService;
 
@@ -19,8 +18,8 @@ public class KafkaController {
     private ProducerService producerService;
 
     @PostMapping
-    public Mono<String> sendMessage(@RequestBody Test test) throws JsonProcessingException {
-        producerService.sendMessageJson(test);
+    public Mono<String> sendMessage(@RequestBody Test test) {
+        producerService.sendMessage(test);
         return Mono.just("Message sent with message: " + test);
     }
 }
