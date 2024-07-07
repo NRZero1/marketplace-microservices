@@ -13,6 +13,7 @@ import com.phincon.backend.bootcamp.marketplace.dto.OrderItemResponse;
 import com.phincon.backend.bootcamp.marketplace.dto.OrderRequest;
 import com.phincon.backend.bootcamp.marketplace.dto.OrderResponse;
 import com.phincon.backend.bootcamp.marketplace.order_service.repository.OrderRepository;
+import com.phincon.backend.bootcamp.marketplace.service_enums.OrderStatus;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -101,7 +102,7 @@ public class OrderService {
                 .builder()
                 .billingAddress(request.getBillingAddress())
                 .customerId(request.getCustomerId())
-                .orderStatus(request.getOrderStatus())
+                .orderStatus(OrderStatus.CREATED.name())
                 .orderDate(LocalDateTime.now())
                 .paymentMethod(request.getPaymentMethod())
                 .shippingAddress(request.getShippingAddress())
