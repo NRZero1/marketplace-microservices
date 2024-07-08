@@ -102,21 +102,21 @@ public class ProductService {
                         log.debug("Current product with Id {} stock is {}", id, product.getStockQuantity());
                         log.debug("Deducted parameter is set as: {}", deducted);
 
-                        if (currentStock < deducted) {
-                            log.error("Product with id {} not having enough stock", id);
-                            return Mono.just(ResponseEntity
-                                    .ok(mapToProductStockResponse(product, ProductStockStatus.OUTOFSTOCK.name())));
-
-                        } else if (currentStock == deducted) {
-                            log.warn("Product stock with id {} will be empty");
-                        }
                         int deductedStock = currentStock - deducted;
                         log.debug("Stock quantity after calculation: {}", deductedStock);
                         product.setStockQuantity(deductedStock);
                         return productRepository.save(product)
                                 .map((savedProduct) -> {
+                                    if (currentStock < deducted) {
+                                        log.warn("Product with id {} not having enough stock", id);
+                                        return ResponseEntity
+                                                .ok(mapToProductStockResponse(product,
+                                                        ProductStockStatus.OUTOFSTOCK.name(),
+                                                        deducted));
+                                    }
                                     return ResponseEntity
-                                            .ok(mapToProductStockResponse(savedProduct, ProductStockStatus.OK.name()));
+                                            .ok(mapToProductStockResponse(savedProduct, ProductStockStatus.OK.name(),
+                                                    deducted));
                                 })
                                 .doOnSuccess((response) -> {
                                     log.info("Product stock updated with product data now: {}", response.toString());
@@ -126,7 +126,7 @@ public class ProductService {
                 });
     }
 
-    public ProductStockResponse mapToProductStockResponse(Product product, String status) {
+    public ProductStockResponse mapToProductStockResponse(Product product, String status, int quantity) {
         return ProductStockResponse
                 .builder()
                 .id(product.getId())
@@ -134,6 +134,7 @@ public class ProductService {
                 .price(product.getPrice())
                 .stockQuantity(product.getStockQuantity())
                 .status(status)
+                .totalPriceItem(product.getPrice() * quantity)
                 .build();
     }
 }
