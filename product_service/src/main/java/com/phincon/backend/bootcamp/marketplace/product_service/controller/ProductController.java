@@ -2,9 +2,11 @@ package com.phincon.backend.bootcamp.marketplace.product_service.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.phincon.backend.bootcamp.marketplace.dto.ProductRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.ProductStockResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.model.Product;
 import com.phincon.backend.bootcamp.marketplace.product_service.service.ProductService;
 
@@ -59,5 +61,10 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteAll() {
         return productService.deleteAll();
+    }
+
+    @PatchMapping("/{id}/deduct")
+    public Mono<?> deduct(@PathVariable long id, @RequestParam(name = "amount") int amount) {
+        return productService.deduct(id, amount);
     }
 }
