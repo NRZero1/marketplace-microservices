@@ -13,6 +13,7 @@ public class ProductStockResponse {
     private long id;
     private String name;
     private double price;
+    private double totalPriceItem;
     private int stockQuantity;
     private String status;
 }
