@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import com.phincon.backend.bootcamp.marketplace.dto.OrderItemRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.OrderItemResponse;
-import com.phincon.backend.bootcamp.marketplace.dto.OrderRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.OrderResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderItemRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Response.OrderItemResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.Response.OrderResponse;
 import com.phincon.backend.bootcamp.marketplace.order_service.repository.OrderRepository;
 import com.phincon.backend.bootcamp.marketplace.service_enums.OrderStatus;
 
@@ -31,6 +35,8 @@ public class OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private OrderItemService orderItemService;
+    @Autowired
+    private KafkaTemplate<String, OrderRequest> template;
 
     public Flux<Order> getAll() {
         return orderRepository.findAll();
@@ -71,6 +77,15 @@ public class OrderService {
                                 return mapToOrderResponse(savedOrder, orderItemResponse);
                             });
 
+                })
+                .doOnNext((response) -> {
+                    log.info("Response get: {}", response);
+                    Message<OrderResponse> message = MessageBuilder
+                            .withPayload(response)
+                            .setHeader(KafkaHeaders.TOPIC, "order-service")
+                            .build();
+
+                    template.send(message);
                 });
     }
 
@@ -90,10 +105,14 @@ public class OrderService {
     }
 
     public Mono<Void> delete(long id) {
-        return orderRepository.deleteById(id);
+        return orderRepository.deleteById(id)
+                .doOnNext((response) -> {
+                    orderItemService.deleteByOrderId(id);
+                });
     }
 
     public Mono<Void> deleteAll() {
+        orderItemService.deleteAll();
         return orderRepository.deleteAll();
     }
 
