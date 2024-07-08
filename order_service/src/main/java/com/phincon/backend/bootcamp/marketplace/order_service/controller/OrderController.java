@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.phincon.backend.bootcamp.marketplace.dto.OrderRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.OrderResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Response.OrderResponse;
 import com.phincon.backend.bootcamp.marketplace.order_service.model.Order;
 import com.phincon.backend.bootcamp.marketplace.order_service.service.OrderService;
 

@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Balance;
 import com.phincon.backend.bootcamp.marketplace.balance_service.service.BalanceService;
-import com.phincon.backend.bootcamp.marketplace.dto.BalanceRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.BalanceRequest;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

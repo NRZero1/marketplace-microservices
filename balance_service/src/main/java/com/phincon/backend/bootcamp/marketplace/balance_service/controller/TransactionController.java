@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Transaction;
 import com.phincon.backend.bootcamp.marketplace.balance_service.service.TransactionService;
-import com.phincon.backend.bootcamp.marketplace.dto.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.TransactionRequest;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

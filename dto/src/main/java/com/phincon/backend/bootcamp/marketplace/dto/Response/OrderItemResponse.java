@@ -1,4 +1,4 @@
-package com.phincon.backend.bootcamp.marketplace.dto;
+package com.phincon.backend.bootcamp.marketplace.dto.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductStockResponse {
+public class OrderItemResponse {
     private long id;
-    private String name;
+
     private double price;
-    private int stockQuantity;
-    private String status;
+
+    private long productId;
+
+    private int quantity;
+
+    private long orderId;
 }

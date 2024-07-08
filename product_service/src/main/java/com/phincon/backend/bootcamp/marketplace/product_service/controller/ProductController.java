@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.phincon.backend.bootcamp.marketplace.dto.ProductRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.ProductStockResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.ProductRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Response.ProductStockResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.model.Product;
 import com.phincon.backend.bootcamp.marketplace.product_service.service.ProductService;
 

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.repository.BalanceRepository;
-import com.phincon.backend.bootcamp.marketplace.dto.BalanceRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.BalanceRequest;
 import com.phincon.backend.bootcamp.marketplace.balance_service.exception.BalanceNotFoundException;
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Balance;
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.phincon.backend.bootcamp.marketplace.dto.OrderItemRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderItemRequest;
 import com.phincon.backend.bootcamp.marketplace.order_service.model.OrderItem;
 import com.phincon.backend.bootcamp.marketplace.order_service.service.OrderItemService;
 

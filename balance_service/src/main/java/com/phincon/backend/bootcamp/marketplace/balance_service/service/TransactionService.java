@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Transaction;
 import com.phincon.backend.bootcamp.marketplace.balance_service.repository.TransactionRepository;
-import com.phincon.backend.bootcamp.marketplace.dto.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.TransactionRequest;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

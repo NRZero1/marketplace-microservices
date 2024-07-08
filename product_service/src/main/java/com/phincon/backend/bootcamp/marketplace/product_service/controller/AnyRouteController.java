@@ -6,7 +6,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.phincon.backend.bootcamp.marketplace.dto.ErrorResponse;
+
+import com.phincon.backend.bootcamp.marketplace.dto.Response.ErrorResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.exception.InvalidUrlException;
 
 import reactor.core.publisher.Mono;

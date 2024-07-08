@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.phincon.backend.bootcamp.marketplace.dto.ProductRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.ProductStockResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.Request.ProductRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.Response.ProductStockResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.exception.ProductNotFoundException;
 import com.phincon.backend.bootcamp.marketplace.product_service.model.Product;
 import com.phincon.backend.bootcamp.marketplace.product_service.repository.ProductRepository;

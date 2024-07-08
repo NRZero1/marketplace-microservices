@@ -1,4 +1,4 @@
-package com.phincon.backend.bootcamp.marketplace.dto;
+package com.phincon.backend.bootcamp.marketplace.dto.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
