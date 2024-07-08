@@ -10,12 +10,10 @@ import com.phincon.backend.bootcamp.marketplace.order_service.exception.OrderIte
 import com.phincon.backend.bootcamp.marketplace.order_service.model.OrderItem;
 import com.phincon.backend.bootcamp.marketplace.order_service.repository.OrderItemRepository;
 
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-@Slf4j
 public class OrderItemService {
     @Autowired
     private OrderItemRepository orderItemRepository;
@@ -33,7 +31,6 @@ public class OrderItemService {
     }
 
     public Mono<OrderItem> save(OrderItem orderItem) {
-
         return orderItemRepository.save(orderItem);
     }
 
