@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderItemRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.OrderItemRequest;
 import com.phincon.backend.bootcamp.marketplace.order_service.exception.OrderItemNotFoundException;
 import com.phincon.backend.bootcamp.marketplace.order_service.model.OrderItem;
 import com.phincon.backend.bootcamp.marketplace.order_service.repository.OrderItemRepository;
