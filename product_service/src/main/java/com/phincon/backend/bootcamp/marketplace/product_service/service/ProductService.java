@@ -102,18 +102,19 @@ public class ProductService {
                         log.debug("Current product with Id {} stock is {}", id, product.getStockQuantity());
                         log.debug("Deducted parameter is set as: {}", deducted);
 
+                        if (currentStock < deducted) {
+                            log.warn("Product with id {} not having enough stock", id);
+                            return Mono.just(ResponseEntity
+                                    .ok(mapToProductStockResponse(product,
+                                            ProductStockStatus.OUTOFSTOCK.name(),
+                                            deducted)));
+                        }
+
                         int deductedStock = currentStock - deducted;
                         log.debug("Stock quantity after calculation: {}", deductedStock);
                         product.setStockQuantity(deductedStock);
                         return productRepository.save(product)
                                 .map((savedProduct) -> {
-                                    if (currentStock < deducted) {
-                                        log.warn("Product with id {} not having enough stock", id);
-                                        return ResponseEntity
-                                                .ok(mapToProductStockResponse(product,
-                                                        ProductStockStatus.OUTOFSTOCK.name(),
-                                                        deducted));
-                                    }
                                     return ResponseEntity
                                             .ok(mapToProductStockResponse(savedProduct, ProductStockStatus.OK.name(),
                                                     deducted));
@@ -123,6 +124,18 @@ public class ProductService {
                                 });
                     }
                     return Mono.empty();
+                });
+    }
+
+    public Mono<Product> addStock(long id, int amount) {
+        return productRepository.findById(id)
+                .map(Optional::of)
+                .switchIfEmpty(
+                        Mono.error(new ProductNotFoundException(String.format("Product not found with id: %d", id))))
+                .flatMap(optionalProduct -> {
+                    Product product = optionalProduct.get();
+                    product.setStockQuantity(product.getStockQuantity() + amount);
+                    return productRepository.save(product);
                 });
     }
 
