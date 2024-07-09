@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.phincon.backend.bootcamp.marketplace.dto.ErrorResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.response.ErrorResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.exception.ProductNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
