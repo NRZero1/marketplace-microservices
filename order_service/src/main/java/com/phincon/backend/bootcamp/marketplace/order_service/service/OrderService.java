@@ -3,9 +3,11 @@ package com.phincon.backend.bootcamp.marketplace.order_service.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -101,6 +103,29 @@ public class OrderService {
                     }
 
                     return Mono.empty();
+                });
+    }
+
+    @KafkaListener(topics = "order-update-status", groupId = "order-status")
+    public Mono<OrderResponse> updateStatus(OrderResponse orderResponse) {
+        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
+        return orderRepository.findById(orderResponse.getId())
+                .map(Optional::of)
+                .switchIfEmpty(Mono.error(new OrderNotFoundException(String.format(
+                        "Order not found with ID: ", orderResponse
+                                .getId()))))
+                .flatMap(optionalOrder -> {
+                    Order order = optionalOrder.get();
+                    order.setOrderStatus(orderResponse.getOrderStatus());
+                    return orderRepository.save(order)
+                            .map(response -> {
+                                orderItemService.findByOrderId(orderResponse.getId())
+                                        .toIterable()
+                                        .forEach(item -> {
+                                            orderItemResponses.add(mapToOrderItemResponse(item));
+                                        });
+                                return mapToOrderResponse(order, orderItemResponses);
+                            });
                 });
     }
 
