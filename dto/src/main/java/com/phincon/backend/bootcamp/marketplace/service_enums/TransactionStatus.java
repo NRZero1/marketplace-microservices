@@ -1,6 +1,7 @@
 package com.phincon.backend.bootcamp.marketplace.service_enums;
 
-public enum PaymentStatus {
+public enum TransactionStatus {
+    PENDING,
     APPROVED,
     REJECTED
 }
