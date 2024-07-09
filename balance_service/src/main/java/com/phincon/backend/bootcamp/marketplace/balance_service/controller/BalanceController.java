@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Balance;
 import com.phincon.backend.bootcamp.marketplace.balance_service.service.BalanceService;
-import com.phincon.backend.bootcamp.marketplace.dto.Request.BalanceRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.BalanceRequest;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
@@ -46,7 +48,7 @@ public class BalanceController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<Balance> update(@PathVariable long id, BalanceRequest balanceRequest) {
+    public Mono<Balance> update(@PathVariable long id, @RequestBody BalanceRequest balanceRequest) {
         return balanceService.update(id, balanceRequest);
     }
 

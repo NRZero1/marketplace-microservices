@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.repository.BalanceRepository;
-import com.phincon.backend.bootcamp.marketplace.dto.Request.BalanceRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.BalanceRequest;
 import com.phincon.backend.bootcamp.marketplace.balance_service.exception.BalanceNotFoundException;
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Balance;
 
@@ -37,7 +37,7 @@ public class BalanceService {
                 .build());
     }
 
-    public Mono<Balance> update(long id, BalanceRequest request) {
+    public Mono<Balance> update(long id, BalanceRequest balanceRequest) {
         Balance balance = new Balance();
         return balanceRepository.findById(id)
                 .map(Optional::of)
@@ -45,7 +45,8 @@ public class BalanceService {
                 .flatMap(optionalBalance -> {
                     if (optionalBalance.isPresent()) {
                         balance.setId(id);
-                        balanceRepository.save(balance);
+                        balance.setBalance(balanceRequest.getBalance());
+                        return balanceRepository.save(balance);
                     }
 
                     return Mono.empty();
