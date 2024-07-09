@@ -13,7 +13,7 @@ public class WebClientConfig {
     @Qualifier("order")
     public WebClient orderClient() {
         return WebClient.builder()
-                .baseUrl("localhost:8084")
+                .baseUrl("http://localhost:8084")
                 .build();
     }
 
