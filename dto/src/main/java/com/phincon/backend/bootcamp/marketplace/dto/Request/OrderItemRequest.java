@@ -1,4 +1,4 @@
-package com.phincon.backend.bootcamp.marketplace.dto.Request;
+package com.phincon.backend.bootcamp.marketplace.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;

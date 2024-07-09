@@ -1,4 +1,4 @@
-package com.phincon.backend.bootcamp.marketplace.dto.Response;
+package com.phincon.backend.bootcamp.marketplace.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse {
-    private int statusCode;
-    private String message;
+public class BalanceResponse {
+    private long id;
+    private double balance;
 }
