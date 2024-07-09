@@ -64,7 +64,13 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/deduct")
-    public Mono<?> deduct(@PathVariable long id, @RequestParam(name = "amount") int amount) {
+    public Mono<ResponseEntity<ProductStockResponse>> deduct(@PathVariable long id,
+            @RequestParam(name = "amount") int amount) {
         return productService.deduct(id, amount);
+    }
+
+    @PatchMapping("/{id}/addStock")
+    public Mono<Product> addStock(@PathVariable long id, @RequestParam(name = "amount") int amount) {
+        return productService.addStock(id, amount);
     }
 }
