@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -14,10 +15,10 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
-import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderItemRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.Request.OrderRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.Response.OrderItemResponse;
-import com.phincon.backend.bootcamp.marketplace.dto.Response.OrderResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.request.OrderItemRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.OrderRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.response.OrderItemResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.response.OrderResponse;
 import com.phincon.backend.bootcamp.marketplace.order_service.repository.OrderRepository;
 import com.phincon.backend.bootcamp.marketplace.service_enums.OrderStatus;
 
@@ -108,24 +109,20 @@ public class OrderService {
 
     @KafkaListener(topics = "order-update-status", groupId = "order-status")
     public Mono<OrderResponse> updateStatus(OrderResponse orderResponse) {
-        List<OrderItemResponse> orderItemResponses = new ArrayList<>();
         return orderRepository.findById(orderResponse.getId())
-                .map(Optional::of)
                 .switchIfEmpty(Mono.error(new OrderNotFoundException(String.format(
-                        "Order not found with ID: ", orderResponse
-                                .getId()))))
-                .flatMap(optionalOrder -> {
-                    Order order = optionalOrder.get();
+                        "Order not found with ID: %d", orderResponse.getId()))))
+                .flatMap(order -> {
                     order.setOrderStatus(orderResponse.getOrderStatus());
                     return orderRepository.save(order)
-                            .map(response -> {
-                                orderItemService.findByOrderId(orderResponse.getId())
-                                        .toIterable()
-                                        .forEach(item -> {
-                                            orderItemResponses.add(mapToOrderItemResponse(item));
-                                        });
-                                return mapToOrderResponse(order, orderItemResponses);
-                            });
+                            .flatMap(savedOrder -> orderItemService.findByOrderId(orderResponse.getId())
+                                    .collectList()
+                                    .map(orderItems -> {
+                                        List<OrderItemResponse> orderItemResponses = orderItems.stream()
+                                                .map(this::mapToOrderItemResponse)
+                                                .collect(Collectors.toList());
+                                        return mapToOrderResponse(savedOrder, orderItemResponses);
+                                    }));
                 });
     }
 
