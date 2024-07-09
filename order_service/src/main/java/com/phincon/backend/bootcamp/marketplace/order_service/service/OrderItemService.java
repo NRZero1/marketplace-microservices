@@ -49,6 +49,10 @@ public class OrderItemService {
                 });
     }
 
+    public Flux<OrderItem> findByOrderId(long id) {
+        return orderItemRepository.findByOrderId(id);
+    }
+
     public Mono<Void> delete(long id) {
         return orderItemRepository.deleteById(id);
     }
