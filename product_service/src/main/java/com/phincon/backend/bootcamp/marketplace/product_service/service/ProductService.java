@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.phincon.backend.bootcamp.marketplace.dto.Request.ProductRequest;
-import com.phincon.backend.bootcamp.marketplace.dto.Response.ProductStockResponse;
+import com.phincon.backend.bootcamp.marketplace.dto.request.ProductRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.response.ProductStockResponse;
 import com.phincon.backend.bootcamp.marketplace.product_service.exception.ProductNotFoundException;
 import com.phincon.backend.bootcamp.marketplace.product_service.model.Product;
 import com.phincon.backend.bootcamp.marketplace.product_service.repository.ProductRepository;
@@ -28,12 +28,24 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Mono<Product> getById(long id) {
-        return productRepository.findById(id).switchIfEmpty(
-                Mono.error(
-                        new ProductNotFoundException(
-                                String.format(
-                                        "Product not found with id: %d", id))));
+    public Mono<ProductStockResponse> getById(long id) {
+        return productRepository.findById(id)
+                .switchIfEmpty(
+                        Mono.error(
+                                new ProductNotFoundException(
+                                        String.format(
+                                                "Product not found with id: %d", id))))
+                .map(response -> {
+                    return ProductStockResponse
+                            .builder()
+                            .id(id)
+                            .name(response.getName())
+                            .price(response.getPrice())
+                            .totalPriceItem(0)
+                            .stockQuantity(response.getStockQuantity())
+                            .status("no status")
+                            .build();
+                });
     }
 
     public Flux<Product> getByName(String name) {
