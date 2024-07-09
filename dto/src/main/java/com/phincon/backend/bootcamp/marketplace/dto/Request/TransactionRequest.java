@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionRequest {
+    private long customerId;
     private double amount;
     private long orderId;
     private String mode;
