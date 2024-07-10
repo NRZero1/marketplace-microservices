@@ -30,7 +30,12 @@ public class OrderItemService {
                                         "Order Item not found with ID: ", id))));
     }
 
-    public Mono<OrderItem> save(OrderItem orderItem) {
+    public Mono<OrderItem> save(OrderItemRequest orderItemRequest) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrderId(orderItemRequest.getOrderId());
+        orderItem.setPrice(orderItemRequest.getPrice());
+        orderItem.setProductId(orderItemRequest.getProductId());
+        orderItem.setQuantity(orderItemRequest.getQuantity());
         return orderItemRepository.save(orderItem);
     }
 
