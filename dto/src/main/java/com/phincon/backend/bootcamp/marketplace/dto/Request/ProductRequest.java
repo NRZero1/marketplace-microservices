@@ -18,7 +18,7 @@ public class ProductRequest {
     @NotBlank(message = "Name cannot be null or blank")
     private String name;
 
-    @Min(1000)
+    @Min(value = 1000, message = "Price min 1000")
     @NotNull(message = "Price cannot be null")
     private double price;
 
