@@ -3,7 +3,6 @@ package com.phincon.backend.bootcamp.marketplace.order_service.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -66,10 +65,9 @@ public class OrderService {
 
                     return Flux.fromIterable(request.getOrderItem())
                             .flatMap(itemRequest -> {
-                                OrderItem orderItem = mapToOrderItem(itemRequest);
-                                orderItem.setOrderId(savedOrder.getId());
-                                log.info("Saving order item: {}", orderItem);
-                                return orderItemService.save(orderItem)
+                                itemRequest.setOrderId(savedOrder.getId());
+                                log.info("Saving order item: {}", itemRequest);
+                                return orderItemService.save(itemRequest)
                                         .doOnSuccess(savedItem -> {
                                             log.info("Order item saved: {}", savedItem);
                                             orderItemResponse.add(mapToOrderItemResponse(savedItem));
@@ -114,6 +112,7 @@ public class OrderService {
                         "Order not found with ID: %d", orderResponse.getId()))))
                 .flatMap(order -> {
                     order.setOrderStatus(orderResponse.getOrderStatus());
+                    order.setTotalAmount(orderResponse.getTotalAmount());
                     return orderRepository.save(order)
                             .flatMap(savedOrder -> orderItemService.findByOrderId(orderResponse.getId())
                                     .collectList()
