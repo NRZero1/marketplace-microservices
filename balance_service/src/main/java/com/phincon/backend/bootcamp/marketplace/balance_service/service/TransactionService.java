@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Transaction;
 import com.phincon.backend.bootcamp.marketplace.balance_service.repository.TransactionRepository;
-import com.phincon.backend.bootcamp.marketplace.dto.Request.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.response.TransactionResponse;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,7 +27,7 @@ public class TransactionService {
         return transactionRepository.findById(id);
     }
 
-    public Mono<Transaction> save(TransactionRequest request) {
+    public Mono<TransactionResponse> save(TransactionRequest request) {
         return transactionRepository.save(Transaction
                 .builder()
                 .amount(request.getAmount())
@@ -35,18 +36,29 @@ public class TransactionService {
                 .mode(request.getMode())
                 .status(request.getStatus())
                 .referenceNumber(request.getReferenceNumber())
-                .build());
+                .build())
+                .flatMap(response -> {
+                    return Mono.just(TransactionResponse
+                            .builder()
+                            .id(response.getId())
+                            .customerId(request.getCustomerId())
+                            .amount(response.getAmount())
+                            .orderId(response.getOrderId())
+                            .paymentDate(response.getPaymentDate())
+                            .mode(response.getMode())
+                            .status(response.getStatus())
+                            .referenceNumber(response.getReferenceNumber())
+                            .build());
+                });
     }
 
-    public Mono<Transaction> update(long id, TransactionRequest request) {
-        Transaction transaction = new Transaction();
+    public Mono<Transaction> update(long id, TransactionResponse response) {
         return transactionRepository.findById(id)
                 .map(Optional::of)
                 .defaultIfEmpty(Optional.empty())
                 .flatMap(optionalTransaction -> {
                     if (optionalTransaction.isPresent()) {
-                        transaction.setId(id);
-                        transactionRepository.save(transaction);
+                        return transactionRepository.save(mapToTransaction(response));
                     }
 
                     return Mono.empty();
@@ -59,5 +71,18 @@ public class TransactionService {
 
     public Mono<Void> deleteAll() {
         return transactionRepository.deleteAll();
+    }
+
+    public Transaction mapToTransaction(TransactionResponse response) {
+        return Transaction
+                .builder()
+                .id(response.getId())
+                .amount(response.getAmount())
+                .amount(response.getAmount())
+                .paymentDate(response.getPaymentDate())
+                .mode(response.getMode())
+                .status(response.getStatus())
+                .referenceNumber(response.getReferenceNumber())
+                .build();
     }
 }
