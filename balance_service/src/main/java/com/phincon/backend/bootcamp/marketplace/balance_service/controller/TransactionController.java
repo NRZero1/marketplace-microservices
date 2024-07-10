@@ -14,50 +14,93 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.phincon.backend.bootcamp.marketplace.balance_service.model.Transaction;
 import com.phincon.backend.bootcamp.marketplace.balance_service.service.TransactionService;
-import com.phincon.backend.bootcamp.marketplace.dto.Request.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.request.TransactionRequest;
+import com.phincon.backend.bootcamp.marketplace.dto.response.TransactionResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/transaction")
 public class TransactionController {
-    @Autowired
-    private TransactionService transactionService;
+        @Autowired
+        private TransactionService transactionService;
 
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Flux<Transaction> getAll() {
-        return transactionService.getAll();
-    }
+        @Operation(summary = "Get All Transactions")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Transactions retrieved", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class)) })
+        })
+        @GetMapping
+        @ResponseStatus(HttpStatus.OK)
+        public Flux<Transaction> getAll() {
+                return transactionService.getAll();
+        }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Transaction> create(@RequestBody TransactionRequest transactionRequest) {
-        return transactionService.save(transactionRequest);
-    }
+        @Operation(summary = "Create a new Transaction")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "201", description = "Transaction created", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = TransactionResponse.class)) })
+        })
+        @PostMapping
+        @ResponseStatus(HttpStatus.CREATED)
+        public Mono<TransactionResponse> create(@RequestBody @Valid TransactionRequest transactionRequest) {
+                return transactionService.save(transactionRequest);
+        }
 
-    @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<Transaction> getById(@PathVariable long id) {
-        return transactionService.getById(id);
-    }
+        @Operation(summary = "Get Transaction by Id")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Transaction retrieved", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class)) }),
+                        @ApiResponse(responseCode = "404", description = "Transaction not found", content = @Content)
+        })
+        @GetMapping("/{id}")
+        @ResponseStatus(HttpStatus.OK)
+        public Mono<Transaction> getById(@PathVariable @Positive(message = "Id must be a positive number") long id) {
+                return transactionService.getById(id);
+        }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public Mono<Transaction> update(@PathVariable long id, TransactionRequest transactionRequest) {
-        return transactionService.update(id, transactionRequest);
-    }
+        @Operation(summary = "Update Transaction by Id")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "200", description = "Transaction updated", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = Transaction.class)) }),
+                        @ApiResponse(responseCode = "404", description = "Transaction not found", content = @Content)
+        })
+        @PutMapping("/{id}")
+        @ResponseStatus(HttpStatus.OK)
+        public Mono<Transaction> update(@PathVariable @Positive(message = "Id must be a positive number") long id,
+                        @RequestBody TransactionResponse transactionResponse) {
+                log.trace("Entering put request update");
+                return transactionService.update(id, transactionResponse);
+        }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> delete(@PathVariable long id) {
-        return transactionService.delete(id);
-    }
+        @Operation(summary = "Delete Transaction by Id")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "204", description = "Transaction deleted", content = @Content),
+                        @ApiResponse(responseCode = "404", description = "Transaction not found", content = @Content)
+        })
+        @DeleteMapping("/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public Mono<Void> delete(@PathVariable @Positive(message = "Id must be a positive number") long id) {
+                return transactionService.delete(id);
+        }
 
-    @DeleteMapping
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteAll() {
-        return transactionService.deleteAll();
-    }
+        @Operation(summary = "Delete All Transactions")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "204", description = "All transactions deleted", content = @Content)
+        })
+        @DeleteMapping
+        @ResponseStatus(HttpStatus.NO_CONTENT)
+        public Mono<Void> deleteAll() {
+                return transactionService.deleteAll();
+        }
 }
