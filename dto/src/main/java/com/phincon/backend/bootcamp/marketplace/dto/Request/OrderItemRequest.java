@@ -3,6 +3,7 @@ package com.phincon.backend.bootcamp.marketplace.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +14,12 @@ import lombok.NoArgsConstructor;
 public class OrderItemRequest {
     private double price;
 
-    @NotEmpty(message = "Product id cannot be null or empty")
+    @Positive(message = "order id must be a positive number")
     private long productId;
 
     @Min(value = 1, message = "Quantity order min is 1")
     @NotNull(message = "Quantity cannot be null")
     private int quantity;
 
-    @NotEmpty(message = "Order id cannot be null or empty")
     private long orderId;
 }
