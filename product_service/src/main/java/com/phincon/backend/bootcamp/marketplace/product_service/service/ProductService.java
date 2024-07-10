@@ -83,6 +83,14 @@ public class ProductService {
                     if (optionalProduct.isPresent()) {
                         Product product = new Product();
                         product.setId(id);
+                        product.setCreatedAt(optionalProduct.get().getCreatedAt());
+                        product.setUpdatedAt(LocalDateTime.now());
+                        product.setName(request.getName());
+                        product.setPrice(request.getPrice());
+                        product.setCategory(request.getCategory());
+                        product.setDescription(request.getDescription());
+                        product.setImageUrl(request.getImageUrl());
+                        product.setStockQuantity(request.getStockQuantity());
                         return productRepository.save(product)
                                 .doOnSuccess((response) -> {
                                     log.info("Product is updated, current product data with id {} is {}", id,
@@ -151,7 +159,7 @@ public class ProductService {
                 });
     }
 
-    public ProductStockResponse mapToProductStockResponse(Product product, String status, int quantity) {
+    public ProductStockResponse mapToProductStockResponse(Product product, String status, int orderedQuantity) {
         return ProductStockResponse
                 .builder()
                 .id(product.getId())
@@ -159,7 +167,7 @@ public class ProductService {
                 .price(product.getPrice())
                 .stockQuantity(product.getStockQuantity())
                 .status(status)
-                .totalPriceItem(product.getPrice() * quantity)
+                .totalPriceItem(product.getPrice() * orderedQuantity)
                 .build();
     }
 }
