@@ -38,23 +38,34 @@ public class ProductWebClient {
 
     public Mono<ProductStockResponse> addStock(long id, int quantity) {
         log.trace("Entering addStock function");
-        String uriPath = String.format("localhost:8081/api/product/%d/addStock", id);
+        String uriPath = String.format("api/product/%d/addStock", id);
+        log.debug("uriPath is {}", uriPath);
         Mono<ProductStockResponse> result = this.webClient.patch()
                 .uri((builder) -> builder.path(uriPath).queryParam("amount", quantity).build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(ProductStockResponse.class);
+                .bodyToMono(ProductStockResponse.class)
+                .flatMap(rawResponse -> {
+                    log.info("Raw response is: {}", rawResponse);
+                    return Mono.just(rawResponse);
+                });
         return result;
     }
 
     public Mono<ProductStockResponse> getProduct(long id) {
         log.trace("Entering getProduct function");
-        String uriPath = String.format("localhost:8081/api/product/%d/", id);
+        log.debug("Id is received with value {}", id);
+        String uriPath = String.format("api/product/%d", id);
+        log.debug("uriPath value is {}", uriPath);
         Mono<ProductStockResponse> result = this.webClient.get()
                 .uri((builder) -> builder.path(uriPath).build())
                 .retrieve()
-                .bodyToMono(ProductStockResponse.class);
+                .bodyToMono(ProductStockResponse.class)
+                .flatMap(rawResponse -> {
+                    log.info("Raw response is: {}", rawResponse);
+                    return Mono.just(rawResponse);
+                });
         return result;
     }
 }
