@@ -56,6 +56,7 @@ public class TransactionWebClient {
     public Mono<TransactionResponse> updateTransactionStatus(TransactionResponse transactionResponse) {
         log.trace("Entering updateTransactionStatus function");
         String uriPath = String.format("api/transaction/%d", transactionResponse.getId());
+        log.debug("uriPath value is: {}", uriPath);
         Mono<TransactionResponse> result = this.webClient.put()
                 .uri((builder) -> builder.path(uriPath).build())
                 .contentType(MediaType.APPLICATION_JSON)
